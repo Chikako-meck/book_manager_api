@@ -41,7 +41,6 @@ INSTALLED_APPS = [
     'book_manager',
     'rest_framework',
     'django_filters',
-    'django_slack'
 ]
 
 REST_FRAMEWORK = {

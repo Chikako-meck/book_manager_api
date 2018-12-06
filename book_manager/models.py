@@ -8,8 +8,8 @@ GENDER_CHOICES = (
 )
 
 class User(models.Model):
-    name = models.CharField(max_length=32)
-    mail = models.EmailField()
+  name = models.CharField(max_length=32)
+  mail = models.EmailField()
 
 class Book(models.Model):
   title = models.CharField(max_length=200)
@@ -36,6 +36,4 @@ class Book(models.Model):
     self.save()
     return 1
 
-class BorrowHistory(mdoels.Model):
-class Review(models.Model):
-
+  

@@ -39,13 +39,14 @@ INSTALLED_APPS = [
     'book_manager',
     'rest_framework',
     'django_filters',
+    'django_slack',
 ]
 
 REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS': ('rest_framework.filters.DjangoFilterBackend',) 
 }
 
-MIDDLEWARE = [
+MIDDLEWARE_CLASSES = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -145,3 +146,31 @@ except ImportError:
 if not DEBUG:
     import django_heroku
     django_heroku.settings(locals())
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'filters': {
+        'require_debug_false': {
+            '()': 'django.utils.log.RequireDebugFalse',
+        },
+    },
+    'handlers': {
+        'slack_admins': {
+            'level': 'ERROR',
+            'filters': ['require_debug_false'],
+            'class': 'django_slack.log.SlackExceptionHandler',
+        },
+    },
+    'loggers': {
+        'django': {
+            'level': 'ERROR',
+            'handlers': ['slack_admins'],
+        },
+    },
+}
+
+SLACK_TOKEN = 'xoxp-66767448195-318184639810-500594357012-f870a94228c565437027124e59395071'
+SLACK_CHANNEL = '#読書チャンネル'
+SLACK_USERNAME = 'book manager bot'
+SLACK_FAIL_SILENTLY = True

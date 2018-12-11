@@ -2,9 +2,14 @@ import datetime
 from django.db import models
 from django.utils import timezone
 
-GENDER_CHOICES = (
+BOOK_STATUSES = (
     (1, 'unborrowed'),
     (2, 'borrowed'),
+)
+
+BORROW_STATUSES = (
+    (1, 'borrow'),
+    (2, 'return'),
 )
 
 class User(models.Model):
@@ -16,7 +21,7 @@ class Book(models.Model):
   author = models.CharField(max_length=200)
   publisher = models.CharField(max_length=200) 
   image_url = models.URLField(max_length=200, null=True)
-  status = models.IntegerField(choices=GENDER_CHOICES)
+  status = models.IntegerField(choices=BOOK_STATUSES)
   updated_at = models.DateTimeField(auto_now=True) 
   created_at = models.DateTimeField(auto_now_add=True)
 
@@ -36,4 +41,9 @@ class Book(models.Model):
     self.save()
     return 1
 
-  
+class BorrowHistory(models.Model):
+  user = models.ForeignKey(User, related_name='borrow_history', on_delete=models.CASCADE)
+  book = models.ForeignKey(Book, related_name='entries', on_delete=models.CASCADE)
+  status = models.IntegerField(choices=BORROW_STATUSES)
+  updated_at = models.DateTimeField(auto_now=True) 
+  created_at = models.DateTimeField(auto_now_add=True)
